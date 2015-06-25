@@ -94,4 +94,8 @@ func main() {
 	if err := findMailer().Send([]string{*toFlag}, me, m.Bytes()); err != nil {
 		log.Fatal(err)
 	}
+
+	if !child.ProcessState.Success() {
+		os.Exit(1)
+	}
 }
