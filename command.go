@@ -16,7 +16,7 @@ Subject: {{.Subject}}
 Cmd: {{.Result.Cmd.Args}}
 Start: {{.Result.Start}}
 End: {{.Result.End}}
-Duration: {{.Result.Duration}}
+Duration: {{.Result.Duration}} total {{.Result.Cmd.ProcessState.UserTime}} user {{.Result.Cmd.ProcessState.SystemTime}} system
 ProcessState: {{.Result.Cmd.ProcessState}}
 Error: {{.Result.Error}}
 Stderr:{{if .Result.StderrExtra}}
