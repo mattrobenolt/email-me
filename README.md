@@ -8,6 +8,9 @@ $ email-me -to=m@robenolt.com ls -lah
 
 ## Installation
 
+Compiled binaries can be found under: https://github.com/mattrobenolt/email-me/releases, or
+if you're familiar with Go, you can install via `go get`:
+
 ```bash
 $ go get github.com/mattrobenolt/email-me
 ```
