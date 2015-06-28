@@ -14,7 +14,7 @@ import (
 	"github.com/jeanfric/goembed/countingwriter"
 )
 
-const Version = "0.1.0"
+const Version = "0.2.0"
 
 var (
 	toFlag      = flag.String("to", "", "email address to send output to")
