@@ -31,7 +31,7 @@ usage: email-me [flags] [command]
 Cmd: [ls -lah] 
 Start: 2015-06-24 18:43:30.195114617 -0700 PDT 
 End: 2015-06-24 18:43:30.210375736 -0700 PDT 
-Duration: 15.261119ms 
+Duration: 10.210247ms total 1.824ms user 4.066ms system
 ProcessState: exit status 0 
 Error: <nil> 
 Stderr: 
