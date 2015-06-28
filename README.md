@@ -17,6 +17,7 @@ $ go get github.com/mattrobenolt/email-me
 ```
 usage: email-me [flags] [command]
   -max=10000: max bytes to capture for stdout/stderr
+  -on-error=false: only notify on a non-0 exit code
   -s="": subject of email (optional)
   -to="": email address to send output to
 ```
