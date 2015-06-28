@@ -20,6 +20,7 @@ var (
 	toFlag      = flag.String("to", "", "email address to send output to")
 	subjectFlag = flag.String("s", "", "subject of email (optional)")
 	maxFlag     = flag.Int("max", 10000, "max bytes to capture for stdout/stderr")
+	onErrorFlag = flag.Bool("on-error", false, "only notify on a non-0 exit code")
 )
 
 func usageAndExit(s string) {
@@ -91,11 +92,17 @@ func main() {
 		Result:  r,
 	}
 
+	success := child.ProcessState.Success()
+
+	if *onErrorFlag && success {
+		os.Exit(0)
+	}
+
 	if err := findMailer().Send([]string{*toFlag}, me, m.Bytes()); err != nil {
 		log.Fatal(err)
 	}
 
-	if !child.ProcessState.Success() {
+	if !success {
 		os.Exit(1)
 	}
 }
