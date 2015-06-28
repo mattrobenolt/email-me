@@ -59,6 +59,7 @@ func main() {
 	child := exec.Command(args[0], args[1:]...)
 	child.Stdout = io.MultiWriter(os.Stdout, countedStdout)
 	child.Stderr = io.MultiWriter(os.Stderr, countedStderr)
+	child.Stdin = os.Stdin
 
 	start := time.Now()
 	err := child.Run()
