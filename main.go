@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -11,49 +10,73 @@ import (
 	"time"
 
 	"github.com/cespare/window"
+	"github.com/codegangsta/cli"
 	"github.com/jeanfric/goembed/countingwriter"
 )
 
 const Version = "0.2.0"
 
-var (
-	toFlag      = flag.String("to", "", "email address to send output to")
-	subjectFlag = flag.String("s", "", "subject of email (optional)")
-	maxFlag     = flag.Int("max", 10000, "max bytes to capture for stdout/stderr")
-	onErrorFlag = flag.Bool("on-error", false, "only notify on a non-0 exit code")
-)
-
-func usageAndExit(s string) {
-	fmt.Printf("!! %s\n", s)
-	flag.Usage()
-	fmt.Println()
-	fmt.Printf("%s version: %s (%s on %s/%s; %s)\n", os.Args[0], Version, runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.Compiler)
+func usageAndExit(s string, c *cli.Context) {
+	fmt.Printf("!! %s\n\n", s)
+	cli.ShowAppHelp(c)
 	os.Exit(1)
 }
 
 func init() {
 	runtime.GOMAXPROCS(1)
 	runtime.LockOSThread()
-
-	flag.Usage = func() {
-		fmt.Fprint(os.Stderr, "usage: email-me [flags] [command]\n")
-		flag.PrintDefaults()
-	}
-	flag.Parse()
 }
 
 func main() {
-	if *toFlag == "" {
-		usageAndExit("missing -to=[address]")
+	app := cli.NewApp()
+	app.Name = "email-me"
+	app.Version = Version
+	app.Usage = "email me when a thing is done"
+	app.Action = main2
+	app.HideHelp = true
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:   "to",
+			Value:  "",
+			Usage:  "email address to send output to",
+			EnvVar: "EMAIL_ME_TO",
+		},
+		cli.StringFlag{
+			Name:  "subject, s",
+			Value: "",
+			Usage: "subject of email (optional)",
+		},
+		cli.IntFlag{
+			Name:   "max",
+			Value:  10000,
+			Usage:  "max bytes to capture for stdout/stderr",
+			EnvVar: "EMAIL_ME_MAX",
+		},
+		cli.BoolFlag{
+			Name:  "on-error",
+			Usage: "only notify on a non-0 exit code",
+		},
+	}
+	app.Run(os.Args)
+}
+
+func main2(c *cli.Context) {
+	to := c.String("to")
+	max := c.Int("max")
+	subject := c.String("subject")
+	onError := c.Bool("on-error")
+
+	if to == "" {
+		usageAndExit("missing --to=[address]", c)
 	}
 
-	args := flag.Args()
+	args := c.Args()
 	if len(args) == 0 {
-		usageAndExit("missing [command]")
+		usageAndExit("missing [command]", c)
 	}
 
-	truncStdout := window.NewWriter(*maxFlag)
-	truncStderr := window.NewWriter(*maxFlag)
+	truncStdout := window.NewWriter(max)
+	truncStderr := window.NewWriter(max)
 	countedStdout := countingwriter.New(truncStdout)
 	countedStderr := countingwriter.New(truncStderr)
 	child := exec.Command(args[0], args[1:]...)
@@ -81,13 +104,12 @@ func main() {
 	}
 
 	me := identity()
-	subject := *subjectFlag
 	if subject == "" {
 		subject = fmt.Sprintf("%s", child.Args)
 	}
 
 	m := &Message{
-		To:      *toFlag,
+		To:      to,
 		From:    me,
 		Subject: subject,
 		Result:  r,
@@ -95,11 +117,11 @@ func main() {
 
 	success := child.ProcessState.Success()
 
-	if *onErrorFlag && success {
+	if onError && success {
 		os.Exit(0)
 	}
 
-	if err := findMailer().Send([]string{*toFlag}, me, m.Bytes()); err != nil {
+	if err := findMailer().Send([]string{to}, me, m.Bytes()); err != nil {
 		log.Fatal(err)
 	}
 
