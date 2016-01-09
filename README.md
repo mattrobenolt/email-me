@@ -18,11 +18,20 @@ $ go get github.com/mattrobenolt/email-me
 ## Usage
 
 ```
-usage: email-me [flags] [command]
-  -max=10000: max bytes to capture for stdout/stderr
-  -on-error=false: only notify on a non-0 exit code
-  -s="": subject of email (optional)
-  -to="": email address to send output to
+NAME:
+email-me - email me when a thing is done
+
+USAGE:
+email-me [global options] [arguments...]
+
+VERSION:
+0.3.0
+
+GLOBAL OPTIONS:
+--to 		email address to send output to [$EMAIL_ME_TO]
+--subject, -s 	subject of email (optional)
+--max "10000"	max bytes to capture for stdout/stderr [$EMAIL_ME_MAX]
+--on-error		only notify on a non-0 exit code
 ```
 
 ## Example email
