@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+set -xe
 
 rm -rf bin/
 docker build --rm -t email-me .
