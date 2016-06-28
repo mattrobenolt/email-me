@@ -8,6 +8,14 @@ $ email-me -to=m@robenolt.com ls -lah
 
 ## Installation
 
+### OS X (Homebrew)
+
+```bash
+$ brew install mattrobenolt/stuff/email-me
+```
+
+### From source
+
 Compiled binaries can be found under: https://github.com/mattrobenolt/email-me/releases, or
 if you're familiar with Go, you can install via `go get`:
 
