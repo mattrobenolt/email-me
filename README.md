@@ -27,19 +27,20 @@ $ go get github.com/mattrobenolt/email-me
 
 ```
 NAME:
-email-me - email me when a thing is done
+   email-me - email me when a thing is done
 
 USAGE:
-email-me [global options] [arguments...]
+   email-me [global options] [arguments...]
 
 VERSION:
-0.3.0
+   0.3.1
 
 GLOBAL OPTIONS:
---to 		email address to send output to [$EMAIL_ME_TO]
---subject, -s 	subject of email (optional)
---max "10000"	max bytes to capture for stdout/stderr [$EMAIL_ME_MAX]
---on-error		only notify on a non-0 exit code
+   --to value                 email address to send output to [$EMAIL_ME_TO]
+   --subject value, -s value  subject of email (optional)
+   --max value                max bytes to capture for stdout/stderr (default: 10000) [$EMAIL_ME_MAX]
+   --on-error                 only notify on a non-0 exit code
+   --version, -v              print the version
 ```
 
 ## Example email
