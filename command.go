@@ -80,8 +80,8 @@ type Mailer interface {
 }
 
 func findMailer() Mailer {
-	if _, err := exec.LookPath("sendmail"); err == nil {
-		return &SendMailMailer{}
+	if path, err := FindSendmail(); err == nil {
+		return &SendMailMailer{path}
 	}
 
 	return &SMTPMailer{}
