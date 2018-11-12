@@ -1,7 +1,7 @@
-FROM golang:1.6
+FROM golang:1.11
 
-RUN mkdir -p /go/src/app
-WORKDIR /go/src/app
+RUN mkdir -p /usr/src/email-me
+WORKDIR /usr/src/email-me
 
 ENV CROSSPLATFORMS \
         linux/amd64 linux/386 linux/arm \
@@ -12,7 +12,6 @@ ENV CROSSPLATFORMS \
 ENV GOARM 5
 
 CMD set -x \
-    && go-wrapper download \
     && for platform in $CROSSPLATFORMS; do \
             GOOS=${platform%/*} \
             GOARCH=${platform##*/} \
