@@ -33,7 +33,7 @@ USAGE:
    email-me [global options] [arguments...]
 
 VERSION:
-   0.3.1
+   0.4.0
 
 GLOBAL OPTIONS:
    --to value                 email address to send output to [$EMAIL_ME_TO]
