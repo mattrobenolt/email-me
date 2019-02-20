@@ -15,7 +15,7 @@ import (
 	"github.com/jeanfric/goembed/countingwriter"
 )
 
-const Version = "0.3.1"
+const Version = "0.4.0"
 
 func usageAndExit(s string, c *cli.Context) {
 	fmt.Printf("!! %s\n\n", s)
