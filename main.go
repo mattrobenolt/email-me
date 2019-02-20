@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"syscall"
 	"time"
 
 	"github.com/cespare/window"
@@ -115,9 +116,17 @@ func main2(c *cli.Context) {
 		Result:  r,
 	}
 
-	success := child.ProcessState.Success()
+	exitStatus := 0
+	if !child.ProcessState.Success() {
+		exitStatus = 1
+	}
 
-	if onError && success {
+	// Try to fetch the actual status code if we can
+	if status, ok := child.ProcessState.Sys().(syscall.WaitStatus); ok {
+		exitStatus = status.ExitStatus()
+	}
+
+	if onError && exitStatus == 0 {
 		os.Exit(0)
 	}
 
@@ -125,7 +134,5 @@ func main2(c *cli.Context) {
 		log.Fatal(err)
 	}
 
-	if !success {
-		os.Exit(1)
-	}
+	os.Exit(exitStatus)
 }
